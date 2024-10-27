@@ -11,6 +11,7 @@ const navigate = useNavigate();
     const dispatch = useDispatch();
     const [emailId, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error,setError] = useState('');
 
     const handleLogin = async () => {
         try{
@@ -21,11 +22,12 @@ const navigate = useNavigate();
     
                 { withCredentials: true }
             )
-            console.log(res.data);
+           
             dispatch(addUser(res.data));
             navigate("/");
         }catch(err){
-            console.error(err);
+            setError(err?.response?.data);
+            console.error(err?.response?.data || "Something went wrong");
         }
       
     }
@@ -57,6 +59,7 @@ const navigate = useNavigate();
                             onChange={(e) => setPassword(e.target.value)}
                             className="input input-bordered w-full max-w-xs" />
                     </label>
+                    {error && <p className="text-red-800">{error}</p>}
                     <div className="card-actions justify-center">
                         <button className="btn btn-primary" onClick={handleLogin}>Login</button>
                     </div>
